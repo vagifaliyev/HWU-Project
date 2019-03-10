@@ -1,0 +1,356 @@
+<% include partials/header %>
+
+<!-- Site navigation menu -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand">Vagif Aliyev</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="/">Home</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="/about">About</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Main content -->
+<div class="container-fluid">
+
+  <div class="row">
+      <div class="col-1">
+      </div>
+      <div class="col-1">
+      </div>
+      <div class="col-9">
+        <h1>Main graph page.</h1>
+      </div>
+      <div class="col-1">
+      </div>
+  </div>
+
+  <div class="row">
+      <div class="col-1">
+        <!--<img src="pictures/ukMap.jpeg" alt="Site location" style="width: 100%;">
+        <br>
+        <img src="pictures/blocks.jpeg" alt="Site location" style="width: 100%;">
+        -->
+      </div>
+      <div class="col-1" style="">
+        <form method="POST" action="/" style="width: 100%;">
+          Specimen number:
+          <br>
+          <select name="specimen" style="width: 100%;" required>
+            <option value="<%=specNumDefault%>" selected><%=specNumDefault%></option>
+            <option value=1>1</option>
+            <option value=2>2</option>
+            <option value=3>3</option>
+          </select>
+          <br>
+          Depth in mm:
+          <br>
+          <select name="depth" style="width: 100%;" required>
+            <option value="<%=depthDefault%>" selected><%=depthDefault%></option>
+            <option value=5>5</option>
+            <option value=10>10</option>
+            <option value=15>15</option>
+            <option value=20>20</option>
+            <option value=30>30</option>
+            <option value=40>40</option>
+            <option value=50>50</option>
+          </select>
+          <br>
+          Thermistor number:
+          <br>
+          <select name="thermistor" style="width: 100%;" required>
+            <option value="<%=thNumDefault%>" selected><%=thNumDefault%></option>
+            <option value=1>1</option>
+            <option value=2>2</option>
+            <option value=3>3</option>
+          </select>
+          <br>
+          Activation Energy in kJ/Mole:
+          <br>
+          <input type="text" name="ae" placeholder="<%=aaDefault%>" style="width: 100%;" required>
+          <br>
+          Target Temperature in degC:
+          <br>
+          <input type="text" name="tt" placeholder="<%=ttDefault%>" style="width: 100%;" required>
+          <br><br>
+          <input type="submit" value="Submit" style="width: 100%;">
+        </form>
+        <div id="s1">
+        </div>
+        <div id="s2">
+        </div>
+        <div id="s3">
+        </div>
+      </div>
+      <div class="col-9">
+        <div id="resChart" style="width:100%; height: 550;"></div>
+        <div id="tempChart" style="width:100%; height: 300;"></div>
+        <div id="logChart" style="width:100%; height: 500;"></div>
+      </div>
+      <div class="col-1">
+      </div>
+  </div>
+
+  <div class="row">
+      <div class="col-1">
+      </div>
+      <div class="col-1">
+      </div>
+      <div class="col-9">
+        <div id="3rdChart"></div>
+      </div>
+      <div class="col-1">
+      </div>
+  </div>
+
+</div>
+
+<script>
+
+  var res_cor_data = [];
+  var res_raw_data = [];
+  var temp_data = [];
+  var time_labels = [];
+  var day_labels = [];
+  var labels = [];
+  var t1 = !<%=t1%>;
+  var t2 = !<%=t2%>;
+  var t3 = !<%=t3%>;
+  var temp1 = [];
+  var temp2 = [];
+  var temp3 = [];
+  var yLn = [];
+  var xKt1 = [];
+  var xKt2 = [];
+  var xKt3 = [];
+
+  // Getting data array on integers from backend
+  <% for (var d of res_cor_data) { %>
+    res_cor_data.push(<%=d%>);
+  <% } %>
+
+  <% for (var d of res_raw_data) { %>
+    res_raw_data.push(<%=d%>);
+  <% } %>
+
+  <% for (var d of temp_data) { %>
+    temp_data.push(<%=d%>);
+  <% } %>
+
+  <% for (var d of temp1) { %>
+    temp1.push(<%=d%>);
+  <% } %>
+
+  <% for (var d of temp2) { %>
+    temp2.push(<%=d%>);
+  <% } %>
+
+  <% for (var d of temp3) { %>
+    temp3.push(<%=d%>);
+  <% } %>
+
+  <% for (var d of yLn) { %>
+    yLn.push(<%=d%>);
+  <% } %>
+
+  <% for (var d of xKt1) { %>
+    xKt1.push(<%=d%>);
+  <% } %>
+
+  <% for (var d of xKt2) { %>
+    xKt2.push(<%=d%>);
+  <% } %>
+
+  <% for (var d of xKt3) { %>
+    xKt3.push(<%=d%>);
+  <% } %>
+
+  var logRaw = [];
+  for (var d of res_raw_data) {
+    logRaw.push(Math.log(d));
+  }
+
+  // Getting labels array of string from backend
+  time_labels = '<%=time_labels%>';
+  time_labels = time_labels.split(",");
+  day_labels = '<%=day_labels%>';
+  day_labels = day_labels.split(",");
+
+  for (i = 0; i < day_labels.length; i++) {
+    //labels.push(new Date(day_labels[i] + " " + time_labels[i]));
+    labels.push(day_labels[i] + " " + time_labels[i]);
+  }
+
+  console.log("Corrected data");
+  console.log(res_cor_data);
+  console.log("Raw data");
+  console.log(res_raw_data);
+  console.log("Time");
+  console.log(time_labels);
+  console.log("Days");
+  console.log(day_labels);
+  console.log("Temp data");
+  console.log(temp_data);
+  console.log(temp1);
+  console.log(temp2);
+  console.log(temp3);
+  console.log("yln");
+  console.log(yLn);
+  console.log("logs");
+  console.log(xKt1);
+  console.log("Logging finished");
+
+  // 1st chart
+  var corData = {
+    x:labels,
+    y:res_cor_data,
+    name:"Corrected",
+    type:"scatter"
+
+  };
+
+  var rawData = {
+    x:labels,
+    y:res_raw_data,
+    name:"Raw",
+    type:"scatter"
+  };
+
+  var data = [
+    corData,
+    rawData
+  ];
+
+  var layout = {
+      title: 'Resistance (Ohm)',
+      xaxis: {
+          //rangeselector: selectorOptions,
+          rangeslider: {}
+      },
+      yaxis: {
+          fixedrange: true
+      },
+      margin: {
+        b: 0,
+        t: 50,
+        pad: 0
+      }
+  };
+
+  Plotly.plot('resChart', data, layout, {displayModeBar: false});
+
+  // 2nd chart
+  var t1Data = {
+    x:labels,
+    y:temp1,
+    name:"Thermistor 1",
+    visible: (t1) ? "legendonly" : true,
+    type:"scatter"
+  }
+
+  var t2Data = {
+    x:labels,
+    y:temp2,
+    name:"Thermistor 2",
+    visible: (t2) ? "legendonly" : true,
+    type:"scatter"
+  }
+
+  var t3Data = {
+    x:labels,
+    y:temp3,
+    name:"Thermistor 3",
+    visible: (t3) ? "legendonly" : true,
+    type:"scatter"
+  }
+
+  var data = [
+    t1Data,
+    t2Data,
+    t3Data
+  ];
+
+  var layout = {
+      title: 'Temperature (degC)',
+      xaxis: {
+          //rangeselector: selectorOptions,
+          rangeslider: {}
+      },
+      yaxis: {
+          fixedrange: true
+      },
+      margin: {
+        b: 0,
+        t: 50,
+        pad: 0
+      }
+  };
+
+  Plotly.plot('tempChart', data, layout, {displayModeBar: false});
+
+  // 3rd chart
+  var trace1 = {
+    x:xKt1,
+    y:yLn,
+    name:"ln1",
+    visible: (t1) ? "legendonly" : true,
+    type:"scatter",
+    mode:"markers"
+  }
+
+  var trace2 = {
+    x:xKt2,
+    y:yLn,
+    name:"ln2",
+    visible: (t2) ? "legendonly" : true,
+    type:"scatter",
+    mode:"markers"
+  }
+
+  var trace3 = {
+    x:xKt3,
+    y:yLn,
+    name:"ln3",
+    visible: (t3) ? "legendonly" : true,
+    type:"scatter",
+    mode:"markers"
+  }
+
+  var data = [
+    trace1,
+    trace2,
+    trace3
+  ];
+
+  var layout = {
+      title: 'Log Graph',
+      yaxis: {
+          fixedrange: true
+      },
+      margin: {
+        b: 100,
+        t: 50,
+        pad: 0
+      }
+  };
+
+  Plotly.newPlot('logChart', data, layout, {displayModeBar: false});
+
+  // Activation energy
+  document.getElementById("s1").innerHTML = "Act. Energy 1: " + Math.round(<%=s1%>*100)/100;
+  document.getElementById("s2").innerHTML = "Act. Energy 2: " + Math.round(<%=s2%>*100)/100;
+  document.getElementById("s3").innerHTML = "Act. Energy 3: " + Math.round(<%=s3%>*100)/100;
+
+</script>
+
+
+<% include partials/footer %>

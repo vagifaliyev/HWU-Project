@@ -1,0 +1,27 @@
+{
+  "name": "vagifbootstrap",
+  "version": "1.0.0",
+  "description": "NodeJS, Bootstrap",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nickdaminov/vagifBootstrap.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nickdaminov/vagifBootstrap/issues"
+  },
+  "homepage": "https://github.com/nickdaminov/vagifBootstrap#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "ejs": "^2.6.1",
+    "express": "^4.16.3",
+    "fast-csv": "^2.4.1",
+    "plotly": "^1.0.6"
+  }
+}
