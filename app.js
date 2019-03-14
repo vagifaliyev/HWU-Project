@@ -27,9 +27,11 @@ app.get('/', function(req, res){
      temp1: [],
      temp2: [],
      temp3: [],
+     temp4: [],
      t1: true,
      t2: false,
      t3: false,
+     t4: false,
      yLn: [],
      xKt1: [],
      xKt2: [],
@@ -63,11 +65,13 @@ app.post('/', function(req, res){
   var temp1 = [];
   var temp2 = [];
   var temp3 = [];
+  var temp4 = [];
   var time_labels = [];
   var day_labels = [];
   var t1 = parseInt(req.body.thermistor) == 1;
   var t2 = parseInt(req.body.thermistor) == 2;
   var t3 = parseInt(req.body.thermistor) == 3;
+  var t4 = parseInt(req.body.thermistor) == 4;
   var yLn = [];
   var xKt1 = [];
   var xKt2 = [];
@@ -87,15 +91,19 @@ app.post('/', function(req, res){
       var tmp1 = data[1 + 11*(parseInt(req.body.specimen) - 1) + 7 + 1];
       var tmp2 = data[1 + 11*(parseInt(req.body.specimen) - 1) + 7 + 2];
       var tmp3 = data[1 + 11*(parseInt(req.body.specimen) - 1) + 7 + 3];
+      var tmp4 = data[1 + 11*(parseInt(req.body.specimen) - 1) + 7 + 4];
       var cor_tmp1 = 1.287600011/1000+Math.log(tmp1)*2.357183092/10000+Math.pow(Math.log(tmp1), 3)*9.509464377/100000000;
       var cor_tmp2 = 1.287600011/1000+Math.log(tmp2)*2.357183092/10000+Math.pow(Math.log(tmp2), 3)*9.509464377/100000000;
       var cor_tmp3 = 1.287600011/1000+Math.log(tmp3)*2.357183092/10000+Math.pow(Math.log(tmp3), 3)*9.509464377/100000000;
+      var cor_tmp4 = 1.287600011/1000+Math.log(tmp4)*2.357183092/10000+Math.pow(Math.log(tmp4), 3)*9.509464377/100000000;
       cor_tmp1 = 1/cor_tmp1 - 273.15;
       cor_tmp2 = 1/cor_tmp2 - 273.15;
       cor_tmp3 = 1/cor_tmp3 - 273.15;
+      cor_tmp4 = 1/cor_tmp4 - 273.15;
       temp1.push(Math.round(cor_tmp1*100)/100);
       temp2.push(Math.round(cor_tmp2*100)/100);
       temp3.push(Math.round(cor_tmp3*100)/100);
+      temp4.push(Math.round(cor_tmp4*100)/100);
       // Raw Data
       var rd = data[1 + 10*(parseInt(req.body.specimen) - 1) + parseInt(req.body.depth)/5];
       // Corrected Data
@@ -103,8 +111,8 @@ app.post('/', function(req, res){
       var tt = parseFloat(req.body.tt);
       var exp = (1/(tt+273.15) - 1/(cor_tmp+273.15))*ae*1000/8.3141;
       var cd = Math.round(rd*Math.pow(Math.E, exp));
-      res_raw_data.push(rd);
-      res_cor_data.push(cd);
+      res_raw_data.push(rd*0.0125);
+      res_cor_data.push(cd*0.0125);
       // Time on X axis
       time_labels.push(data[1]);
       var day = data[0].substring(0,2);
@@ -195,9 +203,11 @@ app.post('/', function(req, res){
         temp1: temp1,
         temp2: temp2,
         temp3: temp3,
+        temp4: temp4,
         t1: t1,
         t2: t2,
         t3: t3,
+        t4: t4,
         yLn: yLn,
         xKt1: xKt1,
         xKt2: xKt2,

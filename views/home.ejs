@@ -72,6 +72,7 @@
             <option value=1>1</option>
             <option value=2>2</option>
             <option value=3>3</option>
+            <option value=4>4</option>
           </select>
           <br>
           Activation Energy in kJ/Mole:
@@ -89,6 +90,8 @@
         <div id="s2">
         </div>
         <div id="s3">
+        </div>
+        <div id="dornoch">
         </div>
       </div>
       <div class="col-9">
@@ -125,9 +128,11 @@
   var t1 = !<%=t1%>;
   var t2 = !<%=t2%>;
   var t3 = !<%=t3%>;
+  var t4 = !<%=t4%>;
   var temp1 = [];
   var temp2 = [];
   var temp3 = [];
+  var temp4 = [];
   var yLn = [];
   var xKt1 = [];
   var xKt2 = [];
@@ -156,6 +161,10 @@
 
   <% for (var d of temp3) { %>
     temp3.push(<%=d%>);
+  <% } %>
+
+  <% for (var d of temp4) { %>
+    temp4.push(<%=d%>);
   <% } %>
 
   <% for (var d of yLn) { %>
@@ -273,10 +282,19 @@
     type:"scatter"
   }
 
+  var t4Data = {
+    x:labels,
+    y:temp4,
+    name:"Thermistor 4",
+    visible: (t4) ? "legendonly" : true,
+    type:"scatter"
+  }
+
   var data = [
     t1Data,
     t2Data,
-    t3Data
+    t3Data,
+    t4Data,
   ];
 
   var layout = {
@@ -294,6 +312,41 @@
         pad: 0
       }
   };
+
+  /*var trace1 = {
+  x: [0, 1, 2],
+  y: [10, 11, 12],
+  type: 'scatter'
+  };
+
+  var trace2 = {
+    x: [2, 3, 4],
+    y: [100, 110, 120],
+    xaxis: 'x2',
+    yaxis: 'y2',
+    type: 'scatter'
+  };
+
+  var trace3 = {
+    x: [3, 4, 5],
+    y: [1000, 1100, 1200],
+    xaxis: 'x3',
+    yaxis: 'y3',
+    type: 'scatter'
+  };
+
+  var data = [trace1, trace2, trace3];
+
+  var layout = {
+  grid: {
+      rows: 3,
+      columns: 1,
+      pattern: 'independent',
+      roworder: 'bottom to top'}
+  };
+
+  // Plotly.newPlot('tempChart', data, layout);
+  */
 
   Plotly.plot('tempChart', data, layout, {displayModeBar: false});
 
@@ -349,6 +402,21 @@
   document.getElementById("s1").innerHTML = "Act. Energy 1: " + Math.round(<%=s1%>*100)/100;
   document.getElementById("s2").innerHTML = "Act. Energy 2: " + Math.round(<%=s2%>*100)/100;
   document.getElementById("s3").innerHTML = "Act. Energy 3: " + Math.round(<%=s3%>*100)/100;
+
+  // Dornoch Data
+  var xmlHttp = new XMLHttpRequest();
+  xmlHttp.open("GET", "http://api.openweathermap.org/data/2.5/weather?q=Dornoch&APPID=f7eb12f351a6cc84894f63865583ae7e", true); // false for synchronous request
+  xmlHttp.send(null);
+  xmlHttp.onreadystatechange = processRequest;
+
+  function processRequest(e) {
+    if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+      var response = JSON.parse(xmlHttp.responseText);
+      console.log(response);
+
+      document.getElementById("dornoch").innerHTML = "Dornoch temperature: " + Math.round((response.main.temp - 273.15)*100)/100 + "&#8451";
+    }
+  }
 
 </script>
 
