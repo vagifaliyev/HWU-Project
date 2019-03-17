@@ -3,8 +3,14 @@ var bodyParser = require('body-parser');
 var path = require('path');
 var fs = require('fs');
 var csv = require('fast-csv');
+var schedule = require('node-schedule');
 
 var app = express();
+
+// Cron job that runs every minute
+var j = schedule.scheduleJob('0 * * * * *', function(){
+  console.log('Today is recognized by Rebecca Black!');
+});
 
 // View Engine
 app.set('view engine', 'ejs');
