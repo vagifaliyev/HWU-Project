@@ -391,7 +391,7 @@
 
   // Dornoch Data
   var xmlHttp = new XMLHttpRequest();
-  xmlHttp.open("GET", "http://api.openweathermap.org/data/2.5/weather?q=Dornoch&APPID=f7eb12f351a6cc84894f63865583ae7e", true); // false for synchronous request
+  xmlHttp.open("GET", "https://api.openweathermap.org/data/2.5/weather?q=Dornoch&APPID=f7eb12f351a6cc84894f63865583ae7e", true); // false for synchronous request
   xmlHttp.send(null);
   xmlHttp.onreadystatechange = processRequest;
 
