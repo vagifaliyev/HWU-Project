@@ -4,12 +4,56 @@ var path = require('path');
 var fs = require('fs');
 var csv = require('fast-csv');
 var schedule = require('node-schedule');
+var https = require('http');
 
 var app = express();
 
+// Database connection
+const { Pool, Client } = require('pg')
+const connectionString = 'postgres://uyuapysi:pYlez3muTAJvLGLdigo_rxHv0r1n0a_5@manny.db.elephantsql.com:5432/uyuapysi'
+// Cehck that DB connection was established
+if (!connectionString){
+  console.log("Error while connecting to the DB");
+}
+
+const pool = new Pool({
+  connectionString: connectionString,
+})
+
 // Cron job that runs every minute
+var temp;
+var insert = '';
 var j = schedule.scheduleJob('0 * * * * *', function(){
-  console.log('Today is recognized by Rebecca Black!');
+  https.get('http://api.openweathermap.org/data/2.5/weather?q=Dornoch&APPID=f7eb12f351a6cc84894f63865583ae7e', (resp) => {
+  let data = '';
+    // A chunk of data has been recieved.
+    resp.on('data', (chunk) => {
+      data += chunk;
+    });
+    // The whole response has been received. Print out the result.
+    resp.on('end', () => {
+      temp = Math.round((JSON.parse(data).main.temp - 273.15)*100)/100;
+      var d = new Date();
+      var month = (d.getMonth()+1 < 10) ? '0'+(d.getMonth()+1) : (d.getMonth()+1);
+      var day = (d.getDate()+1 < 10) ? '0'+(d.getDate()+1) : (d.getDate()+1);
+      var hour = (d.getHours()+1 < 10) ? '0'+(d.getHours()+1) : (d.getHours()+1);
+      var date = '' + d.getFullYear() + '-' + month + '-' + day + ' ' + hour + ':00:00';
+      insert = 'INSERT INTO hist_temp_tidal (date_time, temp, tidal) VALUES (\''+date+'\', \''+temp+'\', \'0\');';
+
+      pool.query(insert, (err, res) => {
+        if (err){
+          console.log("Error while inserting into the DB");
+        } else {
+          console.log("Ok");
+        }
+      })
+
+    });
+  }).on("error", (err) => {
+    console.log("Error: " + err.message);
+  });
+
+  console.log('Cron job run successfully!');
 });
 
 // View Engine
@@ -23,6 +67,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 // Set Static Path
 app.use(express.static(path.join(__dirname, 'views')));
 
+// Passing empty values to the page when loaded
 app.get('/', function(req, res){
    res.render('home',{
      res_cor_data: [],
@@ -34,6 +79,8 @@ app.get('/', function(req, res){
      temp2: [],
      temp3: [],
      temp4: [],
+     realtemp: [],
+     realdate: [],
      t1: true,
      t2: false,
      t3: false,
@@ -53,10 +100,12 @@ app.get('/', function(req, res){
    });
 });
 
+// About page setup
 app.get('/about', function(req, res){
    res.render('about');
 });
 
+// Main graph page setup
 // CSV Data Transfer
 app.post('/', function(req, res){
   console.log("Specimen: " + req.body.specimen);
@@ -85,8 +134,9 @@ app.post('/', function(req, res){
   console.log(t1);
   console.log(t2);
   console.log(t3);
+  console.log(t4);
 
-  fs.createReadStream('./csv/All.csv')
+  fs.createReadStream('./csv/17070901.csv')
     .pipe(csv())
     .on('data', function(data){
       // Temperature
@@ -197,37 +247,51 @@ app.post('/', function(req, res){
       sx = Math.sqrt(bX/(xKt3.length-1));
       s3 = r*sy/sx*8.3141;
 
-      console.log(s1);
-      console.log(s2);
-      console.log(s3);
-      res.render('home',{
-        res_cor_data: res_cor_data,
-        res_raw_data: res_raw_data,
-        temp_data: temp_data,
-        time_labels: time_labels,
-        day_labels: day_labels,
-        temp1: temp1,
-        temp2: temp2,
-        temp3: temp3,
-        temp4: temp4,
-        t1: t1,
-        t2: t2,
-        t3: t3,
-        t4: t4,
-        yLn: yLn,
-        xKt1: xKt1,
-        xKt2: xKt2,
-        xKt3: xKt3,
-        s1: s1,
-        s2: s2,
-        s3: s3,
-        specNumDefault: req.body.specimen,
-        depthDefault: req.body.depth,
-        thNumDefault: req.body.thermistor,
-        aaDefault: req.body.ae,
-        ttDefault: req.body.tt
-      });
+      var realtemp = [];
+      var realdate = [];
+      select = 'SELECT date_time, temp FROM hist_temp_tidal;';
+      pool.query(select, (errDB, resDB) => {
+        if (errDB){
+          console.log("Error while selecting from DB");
+        } else {
+          for (var row in resDB.rows) {
+            realtemp.push(parseFloat(resDB.rows[row].temp));
+            realdate.push(resDB.rows[row].date_time);
+          }
+          console.log("Rendering...");
+          res.render('home',{
+            res_cor_data: res_cor_data,
+            res_raw_data: res_raw_data,
+            temp_data: temp_data,
+            time_labels: time_labels,
+            day_labels: day_labels,
+            temp1: temp1,
+            temp2: temp2,
+            temp3: temp3,
+            temp4: temp4,
+            realtemp: realtemp,
+            realdate: realdate,
+            t1: t1,
+            t2: t2,
+            t3: t3,
+            t4: t4,
+            yLn: yLn,
+            xKt1: xKt1,
+            xKt2: xKt2,
+            xKt3: xKt3,
+            s1: s1,
+            s2: s2,
+            s3: s3,
+            specNumDefault: req.body.specimen,
+            depthDefault: req.body.depth,
+            thNumDefault: req.body.thermistor,
+            aaDefault: req.body.ae,
+            ttDefault: req.body.tt,
+          });
+        }
+      })
     });
 });
 
+// Setting application to run
 app.listen(process.env.PORT || 8080);
