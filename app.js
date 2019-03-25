@@ -23,7 +23,7 @@ const pool = new Pool({
 // Cron job that runs every minute
 var temp;
 var insert = '';
-var j = schedule.scheduleJob('0 * * * * *', function(){
+var j = schedule.scheduleJob('* 0 * * * *', function(){
   https.get('http://api.openweathermap.org/data/2.5/weather?q=Dornoch&APPID=f7eb12f351a6cc84894f63865583ae7e', (resp) => {
   let data = '';
     // A chunk of data has been recieved.
