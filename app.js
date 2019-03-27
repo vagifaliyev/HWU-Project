@@ -11,33 +11,37 @@ var app = express();
 // Database connection
 const { Pool, Client } = require('pg')
 const connectionString = 'postgres://uyuapysi:pYlez3muTAJvLGLdigo_rxHv0r1n0a_5@manny.db.elephantsql.com:5432/uyuapysi'
-// Cehck that DB connection was established
-if (!connectionString){
-  console.log("Error while connecting to the DB");
-}
 
+// Creating a connection pool
 const pool = new Pool({
   connectionString: connectionString,
 })
+// Cehck that DB connection was established
+if (!pool){
+  console.log("Error while connecting to the DB");
+}
 
 // Cron job that runs every minute
 var temp;
 var insert = '';
-var j = schedule.scheduleJob('* 0 * * * *', function(){
+var j = schedule.scheduleJob('*/30 * * * *', function(){
   https.get('http://api.openweathermap.org/data/2.5/weather?q=Dornoch&APPID=f7eb12f351a6cc84894f63865583ae7e', (resp) => {
   let data = '';
     // A chunk of data has been recieved.
     resp.on('data', (chunk) => {
       data += chunk;
     });
-    // The whole response has been received. Print out the result.
+    // The whole response has been received.
     resp.on('end', () => {
       temp = Math.round((JSON.parse(data).main.temp - 273.15)*100)/100;
       var d = new Date();
       var month = (d.getMonth()+1 < 10) ? '0'+(d.getMonth()+1) : (d.getMonth()+1);
       var day = (d.getDate()+1 < 10) ? '0'+(d.getDate()+1) : (d.getDate()+1);
-      var hour = (d.getHours()+1 < 10) ? '0'+(d.getHours()+1) : (d.getHours()+1);
-      var date = '' + d.getFullYear() + '-' + month + '-' + day + ' ' + hour + ':00:00';
+      var hour = (d.getHours() < 10) ? '0'+(d.getHours()) : (d.getHours());
+      var minutes = (d.getMinutes() < 10) ? '0'+(d.getMinutes()) : (d.getMinutes());
+      var seconds = (d.getSeconds() < 10) ? '0'+(d.getSeconds()) : (d.getSeconds());
+      var date = '' + d.getFullYear() + '-' + month + '-' + day + ' ' + hour + ':' + minutes + ':' + seconds;
+      // Constructing SQL query
       insert = 'INSERT INTO hist_temp_tidal (date_time, temp, tidal) VALUES (\''+date+'\', \''+temp+'\', \'0\');';
 
       pool.query(insert, (err, res) => {
@@ -136,11 +140,11 @@ app.post('/', function(req, res){
   console.log(t3);
   console.log(t4);
 
-  fs.createReadStream('./csv/17070901.csv')
+  fs.createReadStream('./csv/write.csv')
     .pipe(csv())
     .on('data', function(data){
       // Temperature
-      var tmp = data[1 + 10*(parseInt(req.body.specimen) - 1) + 7 + parseInt(req.body.thermistor)];
+      var tmp = data[1 + 11*(parseInt(req.body.specimen) - 1) + 7 + parseInt(req.body.thermistor)];
       var cor_tmp = 1.287600011/1000+Math.log(tmp)*2.357183092/10000+Math.pow(Math.log(tmp), 3)*9.509464377/100000000;
       cor_tmp = 1/cor_tmp - 273.15;
       temp_data.push(Math.round(cor_tmp*100)/100);
@@ -161,7 +165,8 @@ app.post('/', function(req, res){
       temp3.push(Math.round(cor_tmp3*100)/100);
       temp4.push(Math.round(cor_tmp4*100)/100);
       // Raw Data
-      var rd = data[1 + 10*(parseInt(req.body.specimen) - 1) + parseInt(req.body.depth)/5];
+      // Change the index
+      var rd = data[1 + 11*(parseInt(req.body.specimen) - 1) + parseInt(req.body.depth)/5];
       // Corrected Data
       var ae = parseFloat(req.body.ae);
       var tt = parseFloat(req.body.tt);
