@@ -93,6 +93,7 @@ app.get('/', function(req, res){
      xKt1: [],
      xKt2: [],
      xKt3: [],
+     xKt4: [],
      s1: 0,
      s2: 0,
      s3: 0,
@@ -135,6 +136,7 @@ app.post('/', function(req, res){
   var xKt1 = [];
   var xKt2 = [];
   var xKt3 = [];
+  var xKt4 = [];
   console.log(t1);
   console.log(t2);
   console.log(t3);
@@ -185,13 +187,15 @@ app.post('/', function(req, res){
       xKt1.push(((1000/(cor_tmp1+273.15))*100)/100);
       xKt2.push(((1000/(cor_tmp2+273.15))*100)/100);
       xKt3.push(((1000/(cor_tmp3+273.15))*100)/100);
+      xKt4.push(((1000/(cor_tmp4+273.15))*100)/100);
     })
     .on('end', function(data){
       // Both _labels and _data are String Arrays
       console.log('Read Finished, calculating slope...');
-      var s1
+      var s1;
       var s2;
       var s3;
+      var s4;
       var sum = 0;
       for (i = 0; i < yLn.length; i++) {
         sum += yLn[i];
@@ -251,7 +255,25 @@ app.post('/', function(req, res){
       sy = Math.sqrt(bY/(xKt3.length-1));
       sx = Math.sqrt(bX/(xKt3.length-1));
       s3 = r*sy/sx*8.3141;
-
+      // AE 4
+      sum = 0;
+      for (i = 0; i < xKt4.length; i++) {
+        sum += xKt4[i];
+      }
+      xMean = sum/xKt4.length;
+      top = 0;
+      bX = 0;
+      bY = 0;
+      for (i = 0; i < xKt4.length; i++) {
+        top += (xKt4[i]-xMean)*(yLn[i]-yMean);
+        bX += (xKt4[i]-xMean)*(xKt4[i]-xMean);
+        bY += (yLn[i]-yMean)*(yLn[i]-yMean);
+      }
+      r = top/Math.sqrt(bX*bY);
+      sy = Math.sqrt(bY/(xKt4.length-1));
+      sx = Math.sqrt(bX/(xKt4.length-1));
+      s4 = r*sy/sx*8.3141;
+      // END
       var realtemp = [];
       var realdate = [];
       select = 'SELECT date_time, temp FROM hist_temp_tidal;';
@@ -264,6 +286,7 @@ app.post('/', function(req, res){
             realdate.push(resDB.rows[row].date_time);
           }
           console.log("Rendering...");
+          var depthArray = [0, 5, 10, 15, 20, 30, 40, 50]
           res.render('home',{
             res_cor_data: res_cor_data,
             res_raw_data: res_raw_data,
@@ -284,11 +307,13 @@ app.post('/', function(req, res){
             xKt1: xKt1,
             xKt2: xKt2,
             xKt3: xKt3,
+            xKt4: xKt4,
             s1: s1,
             s2: s2,
             s3: s3,
+            s4: s4,
             specNumDefault: req.body.specimen,
-            depthDefault: req.body.depth,
+            depthDefault: depthArray[req.body.depth/5],
             thNumDefault: req.body.thermistor,
             aaDefault: req.body.ae,
             ttDefault: req.body.tt,

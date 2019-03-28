@@ -62,9 +62,9 @@
             <option value=10>10</option>
             <option value=15>15</option>
             <option value=20>20</option>
-            <option value=30>30</option>
-            <option value=40>40</option>
-            <option value=50>50</option>
+            <option value=25>30</option>
+            <option value=30>40</option>
+            <option value=35>50</option>
           </select>
           <br>
           Thermistor number:
@@ -92,6 +92,8 @@
         <div id="s2">
         </div>
         <div id="s3">
+        </div>
+        <div id="s4">
         </div>
         <div id="dornoch">
         </div>
@@ -139,6 +141,7 @@
   var xKt1 = [];
   var xKt2 = [];
   var xKt3 = [];
+  var xKt4 = [];
   var realtemp = [];
 
   // Getting data array on integers from backend
@@ -184,6 +187,10 @@
 
   <% for (var d of xKt3) { %>
     xKt3.push(<%=d%>);
+  <% } %>
+
+  <% for (var d of xKt4) { %>
+    xKt4.push(<%=d%>);
   <% } %>
 
   <% for (var d of realtemp) { %>
@@ -364,10 +371,20 @@
     mode:"markers"
   }
 
+  var trace4 = {
+    x:xKt4,
+    y:yLn,
+    name:"ln4",
+    visible: (t4) ? "legendonly" : true,
+    type:"scatter",
+    mode:"markers"
+  }
+
   var data = [
     trace1,
     trace2,
-    trace3
+    trace3,
+    trace4
   ];
 
   var layout = {
@@ -388,6 +405,7 @@
   document.getElementById("s1").innerHTML = "Act. Energy 1: " + Math.round(<%=s1%>*100)/100;
   document.getElementById("s2").innerHTML = "Act. Energy 2: " + Math.round(<%=s2%>*100)/100;
   document.getElementById("s3").innerHTML = "Act. Energy 3: " + Math.round(<%=s3%>*100)/100;
+  document.getElementById("s4").innerHTML = "Act. Energy 3: " + Math.round(<%=s4%>*100)/100;
 
   // Dornoch Data
   var xmlHttp = new XMLHttpRequest();
