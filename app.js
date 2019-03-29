@@ -42,13 +42,13 @@ var j = schedule.scheduleJob('*/30 * * * *', function(){
       var seconds = (d.getSeconds() < 10) ? '0'+(d.getSeconds()) : (d.getSeconds());
       var date = '' + d.getFullYear() + '-' + month + '-' + day + ' ' + hour + ':' + minutes + ':' + seconds;
       // Constructing SQL query
-      insert = 'INSERT INTO hist_temp_tidal (date_time, temp, tidal) VALUES (\''+date+'\', \''+temp+'\', \'0\');';
+      insert = 'INSERT INTO temp (date, temp) VALUES (\''+date+'\', \''+temp+'\');';
 
       pool.query(insert, (err, res) => {
         if (err){
           console.log("Error while inserting into the DB");
         } else {
-          console.log("Ok");
+          console.log("Data inserted");
         }
       })
 
@@ -276,14 +276,14 @@ app.post('/', function(req, res){
       // END
       var realtemp = [];
       var realdate = [];
-      select = 'SELECT date_time, temp FROM hist_temp_tidal;';
+      select = 'SELECT date, temp FROM temp;';
       pool.query(select, (errDB, resDB) => {
         if (errDB){
           console.log("Error while selecting from DB");
         } else {
           for (var row in resDB.rows) {
             realtemp.push(parseFloat(resDB.rows[row].temp));
-            realdate.push(resDB.rows[row].date_time);
+            realdate.push(resDB.rows[row].date);
           }
           console.log("Rendering...");
           var depthArray = [0, 5, 10, 15, 20, 30, 40, 50]
