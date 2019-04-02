@@ -1,0 +1,407 @@
+body {
+  background-size: cover;
+  max-width: 100%;
+  font-family: 'Lato', sans-serif;
+  font-weight: 300;
+  background: #014c8f;
+}
+
+.wrapper {
+  width: 100%;
+  height: 100vh;
+  background: #014c8f;
+}
+
+.about {
+  width: 100%;
+  height: 100%;
+  background: #014c8f;
+}
+
+
+/* --------------header styles start------------------ */
+
+.header {
+  padding-top: 20px;
+}
+
+.header__logo {
+  color: #fff;
+  text-decoration: none;
+  font-size: 24px;
+  font-weight: 400;
+  font-family: 'Nunito', sans-serif;
+}
+
+.header__logo:hover {
+  color: #fff;
+  text-decoration: none;
+}
+
+.header__nav {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+.header__nav-item {
+  color: #fff;
+  text-decoration: none;
+  font-size: 20px;
+  padding: 10px 15px;
+  position: relative;
+}
+
+.header__nav-item::after {
+  content: "";
+  display: block;
+  width: 0%;
+  border-bottom: solid 1px #fff;
+  transition: all .33s;
+  left: 0;
+  right: 0;
+  margin: auto;
+  position: absolute;
+}
+
+.header__nav-item:hover {
+  color: #fff;
+  text-decoration: none;
+}
+
+.header__nav-item:hover::after {
+  width: 60%;
+}
+
+/* --------------header styles end------------------ */
+/* --------------main styles start------------------ */
+
+.main {
+  padding-top: 80px;
+}
+
+/* --------------main styles end------------------ */
+/* --------------calculator styles start------------------ */
+.calculator-card {
+  width: 400px;
+  background: rgba(0, 0, 0, 0.07);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+  padding-top: 30px;
+  padding-bottom: 40px;
+}
+
+
+.calculator__title {
+  color: #fff;
+  font-weight: 100;
+  padding-top: 0;
+  margin-top: 0;
+  padding-bottom: 10px;
+}
+
+form {
+  width: 80%;
+
+}
+
+select {
+  width: 100%;
+  background: none;
+  border-color: transparent;
+  outline: none;
+  /* remove focus ring from Webkit */
+  background: rgba(0, 0, 0, 0.07);
+  -webkit-appearance: none;
+  /* remove the strong OSX influence from Webkit */
+  border-radius: 0;
+  padding: 12px;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.678);
+}
+
+.select {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.select::after {
+  content: '\f078';
+  font: normal normal normal 17px/1 FontAwesome;
+  color: rgba(255, 255, 255, 0.678);
+  right: 11px;
+  top: 0px;
+  height: 40px;
+  line-height: 40px;
+  position: absolute;
+  pointer-events: none;
+}
+
+.input {
+  position: relative;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+input {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.07);
+  border: none;
+  padding: 13px;
+  color: rgba(255, 255, 255, 0.678);
+  font-size: 16px;
+}
+
+input:-internal-autofill-selected {
+  background-color: rgba(0, 0, 0, 0.07) !important;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  background-color: rgba(0, 0, 0, 0.07) !important;
+
+}
+
+input:-webkit-autofill {
+  -webkit-box-shadow: inset 0 0 0px 9999px rgba(0, 0, 0, 0.07) !important;
+}
+
+input:-webkit-autofill {
+  -webkit-box-shadow: inset 0 0 0px 9999px rgba(0, 0, 0, 0.07);
+}
+
+input:focus,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: inset 0 0 0px 9999px rgba(0, 0, 0, 0.07), 0 0 8px rgba(0, 0, 0, 0.07);
+}
+
+input::placeholder {
+  color: rgba(255, 255, 255, 0.678);
+  font-size: 16px;
+}
+input[type=submit] {
+  color: #fff;
+}
+.calculator__btn {
+  width: 100%;
+  font-size: 18px;
+  border: none;
+  border-radius: none;
+  background: #007acc;
+  color: rgba(255, 255, 255, 0.678);
+  font-weight: 100;
+  cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+  padding: 11.5px;
+
+}
+
+/* --------------calculator styles end------------------ */
+/* --------------weather styles start------------------ */
+
+#wrapper {
+  flex-direction: column;
+  padding: 0px;
+  color: white;
+}
+
+.weather__container {
+  width: 51%;
+}
+
+#current-weather {
+  padding: 15px;
+  margin-left: -15px;
+  margin-right: -15px;
+}
+
+#mainTemperature {
+  font-size: 3.5em;
+  line-height: 0.7;
+}
+
+#tempDescription {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.day-weather-box {
+  /* background-color: #007acc; */
+  border-radius: 5px;
+  height: 5em;
+}
+
+.day-weather-box p {
+  margin-bottom: 0;
+}
+
+.side-weather-info {
+  padding: 0px 10px;
+}
+
+.day-weather-inner-box {
+  display: flex;
+  flex-direction: column;
+  margin: 14px auto;
+  padding: 0px 5px;
+  align-items: center;
+}
+
+.forecast-main {
+  padding: 0px 0px 0px 30px;
+}
+
+.forecast-icon {
+  font-size: 25px;
+  margin-left: 5px;
+}
+
+.modal-body p {
+  color: #333;
+}
+
+.d-flex {
+  width: 40px;
+  justify-content: space-between;
+}
+
+.calculation-container {
+  flex-direction: column;
+  padding-bottom: 50px;
+  color: #fff;
+}
+
+.calculation-container h2 {
+  padding-bottom: 30px;
+  text-align: center;
+  font-family: 'Lato', sans-serif;
+  font-size: 40px;
+  font-weight: 300;
+
+}
+.datepickers {
+  padding-top: 75px;
+}
+.datepickers > form {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+.datepickers > form > div:first-child {
+  margin-right: 20px;
+}
+.datepicker {
+  position: relative;
+  width: 33%;
+}
+.datepicker label {
+  position: absolute;
+  right: 19px;
+  top: 20px;
+}
+
+.datepicker input {
+  border: 1px solid #fff;
+  padding: 12px;
+  border-radius: 5px;
+}
+.datepicker-submit-btn {
+  margin-left: auto;
+}
+.datepicker-submit-btn input {
+  border: 1px solid #fff;
+  padding: 12px 30px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.datepicker-submit-btn input:hover {
+  color: #014077;
+  background: #fff;
+  transition: .3s all ease-in-out;
+}
+td.today.day {
+  background: #007acc!important;
+  color: #fff!important;
+}
+h6 {
+  font-weight: 200!important;
+}
+.activation-energy {
+  padding-top: 40px;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+}
+.dropdown-menu {
+  min-width: 13rem!important;
+  padding: 10px!important;
+}
+.activation-energy>div {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+/* --------------weather styles end------------------ */
+/* --------------graph styles start------------------ */
+.graph-section {
+  position: relative;
+  width: 100%;
+  height: auto;
+  margin: 50px 0;
+}
+
+.graph-section>div {
+  /* height: 300px; */
+  position: relative;
+  width: 100%;
+  background: #014c8f;
+
+}
+
+/* --------------graph styles end------------------ */
+/* --------------footer styles start------------------ */
+footer {
+  background: #014077;
+}
+
+.footer {
+  display: flex;
+  /* flex-direction: column; */
+  padding-top: 40px;
+  padding-bottom: 40px;
+  justify-content: space-between;
+  align-items: center;
+  color: #fff;
+}
+
+.footer img {
+  width: 90px;
+}
+
+.footer p {
+  margin: 0;
+  font-size: 15px;
+  letter-spacing: 1.5px;
+}
+
+a {
+  opacity: 1;
+}
+
+.footer-logo {
+  /* margin-bottom: 30px; */
+}
+
+/* --------------footer styles end------------------ */
+
+.container {
+  width: 1300px !important;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+}

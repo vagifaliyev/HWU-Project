@@ -4,7 +4,8 @@ var path = require('path');
 var fs = require('fs');
 var csv = require('fast-csv');
 var schedule = require('node-schedule');
-var https = require('http');
+var http = require('http');
+var https = require('https');
 
 var app = express();
 
@@ -23,9 +24,8 @@ if (!pool){
 
 // Cron job that runs every minute
 var temp;
-var insert = '';
 var j = schedule.scheduleJob('*/30 * * * *', function(){
-  https.get('http://api.openweathermap.org/data/2.5/weather?q=Dornoch&APPID=f7eb12f351a6cc84894f63865583ae7e', (resp) => {
+  http.get('http://api.openweathermap.org/data/2.5/weather?q=Dornoch&APPID=f7eb12f351a6cc84894f63865583ae7e', (resp) => {
   let data = '';
     // A chunk of data has been recieved.
     resp.on('data', (chunk) => {
@@ -42,7 +42,7 @@ var j = schedule.scheduleJob('*/30 * * * *', function(){
       var seconds = (d.getSeconds() < 10) ? '0'+(d.getSeconds()) : (d.getSeconds());
       var date = '' + d.getFullYear() + '-' + month + '-' + day + ' ' + hour + ':' + minutes + ':' + seconds;
       // Constructing SQL query
-      insert = 'INSERT INTO temp (date, temp) VALUES (\''+date+'\', \''+temp+'\');';
+      var insert = 'INSERT INTO temp (date, temp) VALUES (\''+date+'\', \''+temp+'\');';
 
       pool.query(insert, (err, res) => {
         if (err){
@@ -52,6 +52,38 @@ var j = schedule.scheduleJob('*/30 * * * *', function(){
         }
       })
 
+    });
+  }).on("error", (err) => {
+    console.log("Error: " + err.message);
+  });
+
+  https.get('https://environment.data.gov.uk/flood-monitoring/id/stations/E70739/measures', (resp) => {
+  let data = '';
+    // A chunk of data has been recieved.
+    resp.on('data', (chunk) => {
+      data += chunk;
+    });
+    // The whole response has been received.
+    resp.on('end', () => {
+      tidal = JSON.parse(data).items[0].latestReading.value;
+      var d = new Date();
+      var month = (d.getMonth()+1 < 10) ? '0'+(d.getMonth()+1) : (d.getMonth()+1);
+      var day = (d.getDate()+1 < 10) ? '0'+(d.getDate()+1) : (d.getDate()+1);
+      var hour = (d.getHours() < 10) ? '0'+(d.getHours()) : (d.getHours());
+      var minutes = (d.getMinutes() < 10) ? '0'+(d.getMinutes()) : (d.getMinutes());
+      var seconds = (d.getSeconds() < 10) ? '0'+(d.getSeconds()) : (d.getSeconds());
+      var date = '' + d.getFullYear() + '-' + month + '-' + day + ' ' + hour + ':' + minutes + ':' + seconds;
+      // Constructing SQL query
+
+      var insert = 'INSERT INTO tidal (date, height) VALUES (\''+date+'\', \''+tidal+'\');';
+
+      pool.query(insert, (err, res) => {
+        if (err){
+          console.log("Error while inserting into the DB");
+        } else {
+          console.log("Data inserted");
+        }
+      })
     });
   }).on("error", (err) => {
     console.log("Error: " + err.message);
@@ -85,6 +117,8 @@ app.get('/', function(req, res){
      temp4: [],
      realtemp: [],
      realdate: [],
+     tidaldate: [],
+     tidalheight: [],
      t1: true,
      t2: false,
      t3: false,
@@ -97,11 +131,12 @@ app.get('/', function(req, res){
      s1: 0,
      s2: 0,
      s3: 0,
-     specNumDefault: '-',
-     depthDefault: '-',
-     thNumDefault: '-',
-     aaDefault: '-',
-     ttDefault: '-'
+     s4: 0,
+     specNumDefault: 'Specimen number',
+     depthDefault: 'Depth in mm',
+     thNumDefault: 'Thermistor number',
+     aaDefault: 'Activation Energy in KJ/Mole',
+     ttDefault: 'Target Temprature in degC'
    });
 });
 
@@ -168,7 +203,7 @@ app.post('/', function(req, res){
       temp4.push(Math.round(cor_tmp4*100)/100);
       // Raw Data
       // Change the index
-      var rd = data[1 + 11*(parseInt(req.body.specimen) - 1) + parseInt(req.body.depth)/5];
+      var rd = data[1 + 11*(parseInt(req.body.specimen) - 1) + parseInt(req.body.depth)];
       // Corrected Data
       var ae = parseFloat(req.body.ae);
       var tt = parseFloat(req.body.tt);
@@ -276,48 +311,63 @@ app.post('/', function(req, res){
       // END
       var realtemp = [];
       var realdate = [];
-      select = 'SELECT date, temp FROM temp;';
+      var tidaldate = [];
+      var tidalheight = [];
+      select = 'SELECT date, temp FROM temp ORDER BY date;';
       pool.query(select, (errDB, resDB) => {
         if (errDB){
-          console.log("Error while selecting from DB");
+          console.log("Error while selecting Temp Data");
         } else {
-          for (var row in resDB.rows) {
-            realtemp.push(parseFloat(resDB.rows[row].temp));
-            realdate.push(resDB.rows[row].date);
-          }
-          console.log("Rendering...");
-          var depthArray = [0, 5, 10, 15, 20, 30, 40, 50]
-          res.render('home',{
-            res_cor_data: res_cor_data,
-            res_raw_data: res_raw_data,
-            temp_data: temp_data,
-            time_labels: time_labels,
-            day_labels: day_labels,
-            temp1: temp1,
-            temp2: temp2,
-            temp3: temp3,
-            temp4: temp4,
-            realtemp: realtemp,
-            realdate: realdate,
-            t1: t1,
-            t2: t2,
-            t3: t3,
-            t4: t4,
-            yLn: yLn,
-            xKt1: xKt1,
-            xKt2: xKt2,
-            xKt3: xKt3,
-            xKt4: xKt4,
-            s1: s1,
-            s2: s2,
-            s3: s3,
-            s4: s4,
-            specNumDefault: req.body.specimen,
-            depthDefault: depthArray[req.body.depth/5],
-            thNumDefault: req.body.thermistor,
-            aaDefault: req.body.ae,
-            ttDefault: req.body.tt,
-          });
+          select = 'SELECT date, height FROM tidal ORDER BY date;';
+          pool.query(select, (errTi, resTi) => {
+            if (errTi){
+              console.log("Error while selecting Tidal Data");
+            } else {
+              for (var row in resDB.rows) {
+                realtemp.push(parseFloat(resDB.rows[row].temp));
+                realdate.push(resDB.rows[row].date);
+              }
+              for (var row in resTi.rows) {
+                tidalheight.push(parseFloat(resTi.rows[row].height));
+                tidaldate.push(resTi.rows[row].date);
+              }
+              console.log("Rendering...");
+              var depthArray = [0, 5, 10, 15, 20, 30, 40, 50]
+              res.render('home',{
+                res_cor_data: res_cor_data,
+                res_raw_data: res_raw_data,
+                temp_data: temp_data,
+                time_labels: time_labels,
+                day_labels: day_labels,
+                temp1: temp1,
+                temp2: temp2,
+                temp3: temp3,
+                temp4: temp4,
+                realtemp: realtemp,
+                realdate: realdate,
+                tidaldate: tidaldate,
+                tidalheight: tidalheight,
+                t1: t1,
+                t2: t2,
+                t3: t3,
+                t4: t4,
+                yLn: yLn,
+                xKt1: xKt1,
+                xKt2: xKt2,
+                xKt3: xKt3,
+                xKt4: xKt4,
+                s1: s1,
+                s2: s2,
+                s3: s3,
+                s4: s4,
+                specNumDefault: req.body.specimen,
+                depthDefault: depthArray[req.body.depth],
+                thNumDefault: req.body.thermistor,
+                aaDefault: req.body.ae,
+                ttDefault: req.body.tt,
+              });
+            }
+          })
         }
       })
     });

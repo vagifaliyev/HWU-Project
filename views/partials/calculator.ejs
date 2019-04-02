@@ -1,0 +1,46 @@
+<div class="calculator-card">
+    <h2 class="calculator__title">Calculate the graph</h2>
+    <form class="calculator-form" method="POST" action="/#graph">
+        <div class="select">
+            <select name="specimen" required>
+                <option value="<%=specNumDefault%>" selected><%=specNumDefault%></option>
+                <option value=1>1</option>
+                <option value=2>2</option>
+                <option value=3>3</option>
+                <option value=4>4</option>
+                <option value=5>5</option>
+                <option value=6>6</option>
+            </select>
+        </div>
+        <div class="select">
+            <select name="depth" required>
+                <option value="<%=depthDefault%>" selected><%=depthDefault%></option>
+                <option value=1>5</option>
+                <option value=2>10</option>
+                <option value=3>15</option>
+                <option value=4>20</option>
+                <option value=5>30</option>
+                <option value=6>40</option>
+                <option value=7>50</option>
+              </select>
+        </div>
+        <div class="select">
+            <select name="thermistor" required>
+                <option value="<%=thNumDefault%>" selected><%=thNumDefault%></option>
+                <option value=1>1</option>
+                <option value=2>2</option>
+                <option value=3>3</option>
+                <option value=4>4</option>
+              </select>
+        </div>
+        <div class="input">
+            <input type="number" name="ae" placeholder="<%=aaDefault%>" required>
+        </div>
+        <div class="input">
+            <input type="number" name="tt" placeholder="<%=ttDefault%>" required>
+        </div>
+        <input type="submit" class="calculator__btn" value="Submit">
+        <!-- <a href="#graph" class="calculator__btn" onclick="$(this).closest('form').submit()">Submit Link</a> -->
+
+    </form>
+</div>

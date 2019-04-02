@@ -1,33 +1,112 @@
 <% include partials/header %>
-
-<!-- Site navigation menu -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand">Vagif Aliyev</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="/">Home</a>
-      </li>
-      <li class="nav-item active">
-        <a class="nav-link" href="/about">About</a>
-      </li>
-    </ul>
-  </div>
-</nav>
-
-<!-- Main content -->
-<div class="container">
-
-  <h1>Calculations.</h1>
-
-  <p>
-    <img src="pictures/aboutsnip.PNG" alt="Calculations">
-  </p>
-
+<div class="about">
+  <% include partials/navigation %>
+  <main class="main">
+    <div class="container">
+      <div class="calculation">
+        <div class="container calculation-container">
+            <h2 class="mx-auto">Calculations</h2>
+            <p>
+                To be able to convert measured resistance, R (ohms), to resistivity ρ (ohm-cm) the electrodes were
+                calibrated in a solution of known resistivity before embedding them. This can be done through
+                Equation (1):
+            </p>
+            <p class="mx-auto">
+                <a href="https://www.codecogs.com/eqnedit.php?latex=\fn_cm&space;\large&space;{\color{White}\rho&space;=&space;kR&space;\hspace{1cm}&space;(1)&space;}" target="_blank"><img src="https://latex.codecogs.com/svg.latex?\fn_cm&space;\large&space;{\color{White}\rho&space;=&space;kR&space;\hspace{1cm}&space;(1)&space;}" title="\large {\color{White}\rho = kR \hspace{1cm} (1) }" /></a>
+            </p>
+            <p>
+                where k = calibration factor for the array, was obtained as 1.25 cm ± 5%
+      
+            </p>
+            <p>
+                The resistance values measured by the thermistors can be converted into degree Celsius (°C) using
+                the Steinhart-Hart equation:
+      
+            </p>
+            <a class="mx-auto my-4" href="https://www.codecogs.com/eqnedit.php?latex=\fn_cm&space;{\color{White}&space;T&space;=&space;[A&plus;B\ln&space;R&space;&plus;&space;C(\ln&space;R)^{3}]^{-1}&space;-&space;273.15&space;\hspace{1cm}&space;(2)}" target="_blank"><img src="https://latex.codecogs.com/svg.latex?\fn_cm&space;{\color{White}&space;T&space;=&space;[A&plus;B\ln&space;R&space;&plus;&space;C(\ln&space;R)^{3}]^{-1}&space;-&space;273.15&space;\hspace{1cm}&space;(2)}" title="{\color{White} T = [A+B\ln R + C(\ln R)^{3}]^{-1} - 273.15 \hspace{1cm} (2)}" /></a>
+            <p>Where,</p>
+            <p>T is the temperature (°C),</p>
+            <p>R is the resistance measured by the thermistor (ohms),</p>
+            <p>A, B and C are coefficients dependent on the type of thermistor and are 
+                <a href="https://www.codecogs.com/eqnedit.php?latex=\fn_cm&space;{\color{White}&space;1.28\times&space;10^{-3}K^{-1},&space;2.36\times&space;10^{-4}K^{-1},&space;and&space;\hspace{0.2cm}&space;9.31\times&space;10^{-8}&space;K^{-1}}" target="_blank"><img src="https://latex.codecogs.com/svg.latex?\fn_cm&space;{\color{White}&space;1.28\times&space;10^{-3}K^{-1},&space;2.36\times&space;10^{-4}K^{-1},&space;and&space;\hspace{0.2cm}&space;9.31\times&space;10^{-8}&space;K^{-1}}" title="{\color{White} 1.28\times 10^{-3}K^{-1}, 2.36\times 10^{-4}K^{-1}, and \hspace{0.2cm} 9.31\times 10^{-8} K^{-1}}" /></a>
+            </p>
+            <p>
+                Ln stands for natural logarithm
+            </p>
+            <p>
+                To model the influence of temperature on resistivity, an Arrhenius relationship is used:
+            </p>
+            <a  class="mx-auto my-3" href="https://www.codecogs.com/eqnedit.php?latex=\fn_cm&space;\large&space;{\color{White}&space;\rho&space;=&space;\rho&space;_{0}e^{[\frac{E_{a}}{R_{g}T_{k}}]}&space;\hspace{1cm}&space;(3)}" target="_blank"><img src="https://latex.codecogs.com/svg.latex?\fn_cm&space;\large&space;{\color{White}&space;\rho&space;=&space;\rho&space;_{0}e^{[\frac{E_{a}}{R_{g}T_{k}}]}&space;\hspace{1cm}&space;(3)}" title="\large {\color{White} \rho = \rho _{0}e^{[\frac{E_{a}}{R_{g}T_{k}}]} \hspace{1cm} (3)}" /></a>
+            <p>Where,</p>
+            <p>ρ is resistivity (kΩ-cm),</p>
+            <p><a href="https://www.codecogs.com/eqnedit.php?latex=\fn_cm&space;\large&space;{\color{White}&space;T_{k}}" target="_blank"><img src="https://latex.codecogs.com/svg.latex?\fn_cm&space;\large&space;{\color{White}&space;T_{k}}" title="\large {\color{White} T_{k}}" /></a> is
+                absolute temperature (K), </p>
+            <p>
+              <a href="https://www.codecogs.com/eqnedit.php?latex=\fn_cm&space;\large&space;{\color{White}&space;\rho&space;_{0}}" target="_blank"><img src="https://latex.codecogs.com/svg.latex?\fn_cm&space;\large&space;{\color{White}&space;\rho&space;_{0}}" title="\large {\color{White} \rho _{0}}" /></a> is pre-exponential constant (kΩ-cm),
+            </p>
+            <p>
+              <a href="https://www.codecogs.com/eqnedit.php?latex=\fn_cm&space;\large&space;{\color{White}&space;R&space;_{g}}" target="_blank"><img src="https://latex.codecogs.com/svg.latex?\fn_cm&space;\large&space;{\color{White}&space;R&space;_{g}}" title="\large {\color{White} R _{g}}" /></a>
+                is gas constant
+                <a href="https://www.codecogs.com/eqnedit.php?latex=\fn_cm&space;{\color{White}&space;(8.3141&space;\times&space;10^{-3}&space;KJ/mole/K)}" target="_blank"><img src="https://latex.codecogs.com/svg.latex?\fn_cm&space;{\color{White}&space;(8.3141&space;\times&space;10^{-3}&space;KJ/mole/K)}" title="{\color{White} (8.3141 \times 10^{-3} KJ/mole/K)}" /></a> and
+            </p>
+            <p>
+              <a href="https://www.codecogs.com/eqnedit.php?latex=\fn_cm&space;\large&space;{\color{White}&space;E_{a}}" target="_blank"><img src="https://latex.codecogs.com/svg.latex?\fn_cm&space;\large&space;{\color{White}&space;E_{a}}" title="\large {\color{White} E_{a}}" /></a> is
+                activation energy for conduction processes in concrete (kJ∕mole).
+            </p>
+            <p>
+                If
+                <a href="https://www.codecogs.com/eqnedit.php?latex=\fn_cm&space;\large&space;{\color{White}&space;\rho&space;_{x}}" target="_blank"><img src="https://latex.codecogs.com/svg.latex?\fn_cm&space;\large&space;{\color{White}&space;\rho&space;_{x}}" title="\large {\color{White} \rho _{x}}" /></a>
+                and
+                <a href="https://www.codecogs.com/eqnedit.php?latex=\fn_cm&space;\large&space;{\color{White}&space;\rho&space;_{y}}" target="_blank"><img src="https://latex.codecogs.com/svg.latex?\fn_cm&space;\large&space;{\color{White}&space;\rho&space;_{y}}" title="\large {\color{White} \rho _{y}}" /></a>
+                are the resistivity readings at temperatures
+                <a href="https://www.codecogs.com/eqnedit.php?latex=\fn_cm&space;\large&space;{\color{White}&space;T&space;_{k,x}}" target="_blank"><img src="https://latex.codecogs.com/svg.latex?\fn_cm&space;\large&space;{\color{White}&space;T&space;_{k,x}}" title="\large {\color{White} T _{k,x}}" /></a>
+                and
+                <a href="https://www.codecogs.com/eqnedit.php?latex=\fn_cm&space;\large&space;{\color{White}&space;T&space;_{k,y}}" target="_blank"><img src="https://latex.codecogs.com/svg.latex?\fn_cm&space;\large&space;{\color{White}&space;T&space;_{k,y}}" title="\large {\color{White} T _{k,y}}" /></a>
+                respectively, then, from Eq. (3):
+            </p>
+            <a class="mx-auto mt-3 mb-4" href="https://www.codecogs.com/eqnedit.php?latex=\fn_cm&space;\large&space;{\color{White}&space;\rho&space;_{x}&space;=&space;\rho_{y}e^{\frac{E_{a}}{R_{g}}[\frac{1}{T_{k,x}}-\frac{1}{T_{k,y}}]}&space;\hspace{1cm}&space;(4)}" target="_blank"><img src="https://latex.codecogs.com/svg.latex?\fn_cm&space;\large&space;{\color{White}&space;\rho&space;_{x}&space;=&space;\rho_{y}e^{\frac{E_{a}}{R_{g}}[\frac{1}{T_{k,x}}-\frac{1}{T_{k,y}}]}&space;\hspace{1cm}&space;(4)}" title="\large {\color{White} \rho _{x} = \rho_{y}e^{\frac{E_{a}}{R_{g}}[\frac{1}{T_{k,x}}-\frac{1}{T_{k,y}}]} \hspace{1cm} (4)}" /></a>
+            <p>
+                From Eq. (4), a value of resistivity,
+                <a href="https://www.codecogs.com/eqnedit.php?latex=\fn_cm&space;\large&space;{\color{White}&space;\rho&space;_{y}}" target="_blank"><img src="https://latex.codecogs.com/svg.latex?\fn_cm&space;\large&space;{\color{White}&space;\rho&space;_{y}}" title="\large {\color{White} \rho _{y}}" /></a>
+                , recorded at a temperature,
+                <a href="https://www.codecogs.com/eqnedit.php?latex=\fn_cm&space;\large&space;{\color{White}&space;T&space;_{k,y}}" target="_blank"><img src="https://latex.codecogs.com/svg.latex?\fn_cm&space;\large&space;{\color{White}&space;T&space;_{k,y}}" title="\large {\color{White} T _{k,y}}" /></a>
+                can be used to get an
+                equivalent resistivity,
+                <a href="https://www.codecogs.com/eqnedit.php?latex=\fn_cm&space;\large&space;{\color{White}&space;\rho&space;_{x}}" target="_blank"><img src="https://latex.codecogs.com/svg.latex?\fn_cm&space;\large&space;{\color{White}&space;\rho&space;_{x}}" title="\large {\color{White} \rho _{x}}" /></a>
+                ,of the material at temperature,
+                <a href="https://www.codecogs.com/eqnedit.php?latex=\fn_cm&space;\large&space;{\color{White}&space;T&space;_{k,x}}" target="_blank"><img src="https://latex.codecogs.com/svg.latex?\fn_cm&space;\large&space;{\color{White}&space;T&space;_{k,x}}" title="\large {\color{White} T _{k,x}}" /></a>
+                , with a known
+                <a href="https://www.codecogs.com/eqnedit.php?latex=\fn_cm&space;\large&space;{\color{White}&space;E_{a}&space;/&space;R_{g}}" target="_blank"><img src="https://latex.codecogs.com/svg.latex?\fn_cm&space;\large&space;{\color{White}&space;E_{a}&space;/&space;R_{g}}" title="\large {\color{White} E_{a} / R_{g}}" /></a>
+                ratio for the
+                conduction stage. The process standardizes the measurements to a reference temperature, removing the
+                effect of temperature on the electrical resistivity. The activation energy can be entered either by
+                the researcher or can be evaluated from the data for a more accurate value. The reference
+                temperature
+                (<a href="https://www.codecogs.com/eqnedit.php?latex=\fn_cm&space;\large&space;{\color{White}&space;T&space;_{k,y}}" target="_blank"><img src="https://latex.codecogs.com/svg.latex?\fn_cm&space;\large&space;{\color{White}&space;T&space;_{k,y}}" title="\large {\color{White} T _{k,y}}" /></a>)
+                is provided by the user, usually around 25°C (298.15 K).
+            </p>
+            <p>
+                Through the experimental measurements the ratio of
+                <a href="https://www.codecogs.com/eqnedit.php?latex=\fn_cm&space;\large&space;{\color{White}&space;E_{a}&space;/&space;R_{g}}" target="_blank"><img src="https://latex.codecogs.com/svg.latex?\fn_cm&space;\large&space;{\color{White}&space;E_{a}&space;/&space;R_{g}}" title="\large {\color{White} E_{a} / R_{g}}" /></a>
+                can be determined and as the gas constant
+                (<a href="https://www.codecogs.com/eqnedit.php?latex=\fn_cm&space;\large&space;{\color{White}&space;R&space;_{g}}" target="_blank"><img src="https://latex.codecogs.com/svg.latex?\fn_cm&space;\large&space;{\color{White}&space;R&space;_{g}}" title="\large {\color{White} R _{g}}" /></a>)
+                is known the activation energy
+                (<a href="https://www.codecogs.com/eqnedit.php?latex=\fn_cm&space;\large&space;{\color{White}&space;E_{a}}" target="_blank"><img src="https://latex.codecogs.com/svg.latex?\fn_cm&space;\large&space;{\color{White}&space;E_{a}}" title="\large {\color{White} E_{a}}" /></a>)
+                can be evaluated for the particular mix and electrode pair
+                depth. Equation (3) can be rewritten as
+            </p>
+            <a class="mx-auto mt-2 mb-4" href="https://www.codecogs.com/eqnedit.php?latex=\fn_cm&space;\large&space;{\color{White}&space;\ln&space;\rho&space;=&space;\ln\rho_{0}&plus;\frac{E_{a}}{R_{g}T_{k}}&space;\hspace{1cm}&space;(5)}" target="_blank"><img src="https://latex.codecogs.com/svg.latex?\fn_cm&space;\large&space;{\color{White}&space;\ln&space;\rho&space;=&space;\ln\rho_{0}&plus;\frac{E_{a}}{R_{g}T_{k}}&space;\hspace{1cm}&space;(5)}" title="\large {\color{White} \ln \rho = \ln\rho_{0}+\frac{E_{a}}{R_{g}T_{k}} \hspace{1cm} (5)}" /></a>
+                    <p>
+                        The plot of ln ρ against
+                        <a href="https://www.codecogs.com/eqnedit.php?latex=\fn_cm&space;\large&space;{\color{White}&space;T_{k}/1000}" target="_blank"><img src="https://latex.codecogs.com/svg.latex?\fn_cm&space;\large&space;{\color{White}&space;T_{k}/1000}" title="\large {\color{White} T_{k}/1000}" /></a>
+                         , will be a straight line with a slope of
+                         <a href="https://www.codecogs.com/eqnedit.php?latex=\fn_cm&space;\large&space;{\color{White}&space;E_{a}&space;/&space;R_{g}}" target="_blank"><img src="https://latex.codecogs.com/svg.latex?\fn_cm&space;\large&space;{\color{White}&space;E_{a}&space;/&space;R_{g}}" title="\large {\color{White} E_{a} / R_{g}}" /></a>
+                          . For this process the temperature values must be in units of Kelvin.   
+                    </p>
+        </div>
+      </div>
+    </div>
+  </main>
 </div>
 
 <% include partials/footer %>

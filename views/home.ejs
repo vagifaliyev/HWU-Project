@@ -1,128 +1,23 @@
 <% include partials/header %>
-
-<!-- Site navigation menu -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand">Vagif Aliyev</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="/">Home</a>
-      </li>
-      <li class="nav-item active">
-        <a class="nav-link" href="/about">About</a>
-      </li>
-    </ul>
-  </div>
-</nav>
-
-<!-- Main content -->
-<div class="container-fluid">
-
-  <div class="row">
-      <div class="col-1">
-      </div>
-      <div class="col-1">
-      </div>
-      <div class="col-9">
-        <h1>Main graph page.</h1>
-      </div>
-      <div class="col-1">
-      </div>
-  </div>
-
-  <div class="row">
-      <div class="col-1">
-        <!--<img src="pictures/ukMap.jpeg" alt="Site location" style="width: 100%;">
-        <br>
-        <img src="pictures/blocks.jpeg" alt="Site location" style="width: 100%;">-->
-      </div>
-      <div class="col-1" style="">
-        <form method="POST" action="/" style="width: 100%;">
-          Specimen number:
-          <br>
-          <select name="specimen" style="width: 100%;" required>
-            <option value="<%=specNumDefault%>" selected><%=specNumDefault%></option>
-            <option value=1>1</option>
-            <option value=2>2</option>
-            <option value=3>3</option>
-            <option value=4>4</option>
-            <option value=5>5</option>
-            <option value=6>6</option>
-          </select>
-          <br>
-          Depth in mm:
-          <br>
-          <select name="depth" style="width: 100%;" required>
-            <option value="<%=depthDefault%>" selected><%=depthDefault%></option>
-            <option value=5>5</option>
-            <option value=10>10</option>
-            <option value=15>15</option>
-            <option value=20>20</option>
-            <option value=25>30</option>
-            <option value=30>40</option>
-            <option value=35>50</option>
-          </select>
-          <br>
-          Thermistor number:
-          <br>
-          <select name="thermistor" style="width: 100%;" required>
-            <option value="<%=thNumDefault%>" selected><%=thNumDefault%></option>
-            <option value=1>1</option>
-            <option value=2>2</option>
-            <option value=3>3</option>
-            <option value=4>4</option>
-          </select>
-          <br>
-          Activation Energy in kJ/Mole:
-          <br>
-          <input type="text" name="ae" placeholder="<%=aaDefault%>" style="width: 100%;" required>
-          <br>
-          Target Temperature in degC:
-          <br>
-          <input type="text" name="tt" placeholder="<%=ttDefault%>" style="width: 100%;" required>
-          <br><br>
-          <input type="submit" value="Submit" style="width: 100%;">
-        </form>
-        <div id="s1">
-        </div>
-        <div id="s2">
-        </div>
-        <div id="s3">
-        </div>
-        <div id="s4">
-        </div>
-        <div id="dornoch">
-        </div>
-      </div>
-      <div class="col-9">
-        <div id="resChart" style="width:100%; height: 550;"></div>
-        <div id="tempChart" style="width:100%; height: 300;"></div>
-        <div id="logChart" style="width:100%; height: 500;"></div>
-      </div>
-      <div class="col-1">
-      </div>
-  </div>
-
-  <div class="row">
-      <div class="col-1">
-      </div>
-      <div class="col-1">
-      </div>
-      <div class="col-9">
-        <div id="3rdChart"></div>
-      </div>
-      <div class="col-1">
-      </div>
-  </div>
+<div class="wrapper">
+  <% include partials/navigation %>
+  <main class="main">
+    <div class="container">
+      <% include partials/calculator %>
+      <% include partials/weather %>
+    </div>
+  </main>
 
 </div>
-
+<div id="graph" class="graph-section">
+  <div id="resChart" style="height: 500px;margin-bottom: 40px;"></div>
+  <div id="tempChart" style="height: 400px;margin-bottom: 40px"></div>
+  <div id="logChart" style="height: 400px;margin-bottom: 40px"></div>
+</div>
+<% include partials/footer %>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script src="./js/weather.js"></script>
 <script>
-
   var res_cor_data = [];
   var res_raw_data = [];
   var temp_data = [];
@@ -143,65 +38,54 @@
   var xKt3 = [];
   var xKt4 = [];
   var realtemp = [];
-
+  var tidalheight = [];
   // Getting data array on integers from backend
   <% for (var d of res_cor_data) { %>
-    res_cor_data.push(<%=d%>);
+  res_cor_data.push(<%=d%>);
   <% } %>
-
   <% for (var d of res_raw_data) { %>
-    res_raw_data.push(<%=d%>);
+  res_raw_data.push(<%=d%>);
   <% } %>
-
   <% for (var d of temp_data) { %>
-    temp_data.push(<%=d%>);
+  temp_data.push(<%=d%>);
   <% } %>
-
   <% for (var d of temp1) { %>
-    temp1.push(<%=d%>);
+  temp1.push(<%=d%>);
   <% } %>
-
   <% for (var d of temp2) { %>
-    temp2.push(<%=d%>);
+  temp2.push(<%=d%>);
   <% } %>
-
   <% for (var d of temp3) { %>
-    temp3.push(<%=d%>);
+  temp3.push(<%=d%>);
   <% } %>
-
   <% for (var d of temp4) { %>
-    temp4.push(<%=d%>);
+  temp4.push(<%=d%>);
   <% } %>
-
   <% for (var d of yLn) { %>
-    yLn.push(<%=d%>);
+  yLn.push(<%=d%>);
   <% } %>
-
   <% for (var d of xKt1) { %>
-    xKt1.push(<%=d%>);
+  xKt1.push(<%=d%>);
   <% } %>
-
   <% for (var d of xKt2) { %>
-    xKt2.push(<%=d%>);
+  xKt2.push(<%=d%>);
   <% } %>
-
   <% for (var d of xKt3) { %>
-    xKt3.push(<%=d%>);
+  xKt3.push(<%=d%>);
   <% } %>
-
   <% for (var d of xKt4) { %>
-    xKt4.push(<%=d%>);
+  xKt4.push(<%=d%>);
   <% } %>
-
   <% for (var d of realtemp) { %>
-    realtemp.push(<%=d%>);
+  realtemp.push(<%=d%>);
   <% } %>
-
+  <% for (var d of tidalheight) { %>
+  tidalheight.push(<%=d%>);
+  <% } %>
   var logRaw = [];
   for (var d of res_raw_data) {
     logRaw.push(Math.log(d));
   }
-
   // Getting labels array of string from backend
   time_labels = '<%=time_labels%>';
   time_labels = time_labels.split(",");
@@ -209,220 +93,263 @@
   day_labels = day_labels.split(",");
   realdate = '<%=realdate%>';
   realdate = realdate.split(",");
-
+  tidaldate = '<%=tidaldate%>';
+  tidaldate = tidaldate.split(",");
   for (i = 0; i < day_labels.length; i++) {
     labels.push(day_labels[i] + " " + time_labels[i]);
   }
-
-  console.log("Real date");
-  console.log(realdate);
-  console.log("Real temp");
-  console.log(realtemp);
-  console.log("Corrected data");
-  console.log(res_cor_data);
-  console.log("Raw data");
-  console.log(res_raw_data);
-  console.log("Time");
-  console.log(time_labels);
-  console.log("Days");
-  console.log(day_labels);
-  console.log("Temp data");
-  console.log(temp_data);
-  console.log(temp1);
-  console.log(temp2);
-  console.log(temp3);
-  console.log("yln");
-  console.log(yLn);
-  console.log("logs");
-  console.log(xKt1);
-  console.log("Logging finished");
-
+  console.log("Real tidal");
+  console.log(tidaldate);
+  console.log("Real tidal");
+  console.log(tidalheight);
+  // console.log("Corrected data");
+  // console.log(res_cor_data);
+  // console.log("Raw data");
+  // console.log(res_raw_data);
+  // console.log("Time");
+  // console.log(time_labels);
+  // console.log("Days");
+  // console.log(day_labels);
+  // console.log("Temp data");
+  // console.log(temp_data);
+  // console.log(temp1);
+  // console.log(temp2);
+  // console.log(temp3);
+  // console.log("yln");
+  // console.log(yLn);
+  // console.log("logs");
+  // console.log(xKt1);
+  // console.log("Logging finished");
   // 1st chart
   var corData = {
-    x:labels,
-    y:res_cor_data,
-    name:"Corrected",
-    type:"scatter"
-
+    x: labels,
+    y: res_cor_data,
+    name: "Corrected",
+    type: "scatter"
   };
-
   var rawData = {
-    x:labels,
-    y:res_raw_data,
-    name:"Raw",
-    type:"scatter"
+    x: labels,
+    y: res_raw_data,
+    name: "Raw",
+    type: "scatter"
   };
-
   var data = [
     corData,
     rawData
   ];
-
   var layout = {
-      title: 'Resistivity',
-      xaxis: {
-          //rangeselector: selectorOptions,
-          rangeslider: {}
-      },
-      yaxis: {
-          fixedrange: true
-      },
-      margin: {
-        b: 0,
-        t: 50,
-        pad: 0
+    title: 'Resistivity',
+    font: {
+      family: "'Nunito', sans-serif",
+      size: 17,
+      color: '#004c8e'
+    },
+    xaxis: {
+    'rangeslider': {
+    },
+      color: '#333',
+      tickfont: {
+        size: 14,
+        color: '#7f7f7f'
       }
+    },
+    yaxis: {
+      fixedrange: true,
+      color: '#333',
+      tickfont: {
+        size: 14,
+        color: '#7f7f7f'
+      }
+    },
+    margin: {
+      b: 0,
+      t: 50,
+      pad: 0
+    }
   };
+  Plotly.plot('resChart', data, layout, {
+    displayModeBar: false
+  });
 
-  Plotly.plot('resChart', data, layout, {displayModeBar: false});
 
   // 2nd chart
   var t1Data = {
-    x:labels,
-    y:temp1,
-    name:"Thermistor 1",
+    x: labels,
+    y: temp1,
+    name: "Thermistor 1",
     visible: (t1) ? "legendonly" : true,
-    type:"scatter"
+    type: "scatter"
   }
-
   var t2Data = {
-    x:labels,
-    y:temp2,
-    name:"Thermistor 2",
+    x: labels,
+    y: temp2,
+    name: "Thermistor 2",
     visible: (t2) ? "legendonly" : true,
-    type:"scatter"
+    type: "scatter"
   }
-
   var t3Data = {
-    x:labels,
-    y:temp3,
-    name:"Thermistor 3",
+    x: labels,
+    y: temp3,
+    name: "Thermistor 3",
     visible: (t3) ? "legendonly" : true,
-    type:"scatter"
+    type: "scatter"
   }
-
   var t4Data = {
-    x:labels,
-    y:temp4,
-    name:"Thermistor 4",
+    x: labels,
+    y: temp4,
+    name: "Thermistor 4",
     visible: (t4) ? "legendonly" : true,
-    type:"scatter"
+    type: "scatter"
   }
-
   var realData = {
-    x:realdate,
-    y:realtemp,
-    name:"Real temperature",
+    x: realdate,
+    y: realtemp,
+    name: "Real temp.",
     visible: true,
-    type:"scatter"
+    type: "scatter"
   }
-
+  var tidalData = {
+    x: tidaldate,
+    y: tidalheight,
+    name: "Tidal",
+    visible: true,
+    type: "scatter"
+  }
   var data = [
     t1Data,
     t2Data,
     t3Data,
     t4Data,
     realData,
+    tidalData,
   ];
-
   var layout = {
-      title: 'Temperature (degC)',
-      xaxis: {
-          //rangeselector: selectorOptions,
-          rangeslider: {}
+    title: 'Temperature (degC)',
+    font: {
+      family: "'Nunito', sans-serif",
+      size: 17,
+      color: '#004c8e'
+    },
+    xaxis: {
+      rangeslider: {
       },
-      yaxis: {
-          fixedrange: true
-      },
-      margin: {
-        b: 0,
-        t: 50,
-        pad: 0
+      color: '#333',
+      tickfont: {
+        size: 14,
+        color: '#7f7f7f'
       }
+
+    },
+    yaxis: {
+      fixedrange: true,
+      color: '#333',
+      tickfont: {
+        size: 14,
+        color: '#7f7f7f'
+      }
+
+    },
+    margin: {
+      b: 0,
+      t: 50,
+      pad: 0
+    }
   };
-
-  Plotly.plot('tempChart', data, layout, {displayModeBar: false});
-
+  Plotly.plot('tempChart', data, layout, {
+    displayModeBar: false
+  });
   // 3rd chart
   var trace1 = {
-    x:xKt1,
-    y:yLn,
-    name:"ln1",
+    x: xKt1,
+    y: yLn,
+    name: "ln1",
     visible: (t1) ? "legendonly" : true,
-    type:"scatter",
-    mode:"markers"
+    type: "scatter",
+    mode: "markers"
   }
-
   var trace2 = {
-    x:xKt2,
-    y:yLn,
-    name:"ln2",
+    x: xKt2,
+    y: yLn,
+    name: "ln2",
     visible: (t2) ? "legendonly" : true,
-    type:"scatter",
-    mode:"markers"
+    type: "scatter",
+    mode: "markers"
   }
-
   var trace3 = {
-    x:xKt3,
-    y:yLn,
-    name:"ln3",
+    x: xKt3,
+    y: yLn,
+    name: "ln3",
     visible: (t3) ? "legendonly" : true,
-    type:"scatter",
-    mode:"markers"
+    type: "scatter",
+    mode: "markers"
   }
-
   var trace4 = {
-    x:xKt4,
-    y:yLn,
-    name:"ln4",
+    x: xKt4,
+    y: yLn,
+    name: "ln4",
     visible: (t4) ? "legendonly" : true,
-    type:"scatter",
-    mode:"markers"
+    type: "scatter",
+    mode: "markers"
   }
-
   var data = [
     trace1,
     trace2,
     trace3,
     trace4
   ];
-
   var layout = {
-      title: 'Log Graph',
-      yaxis: {
-          fixedrange: true
-      },
-      margin: {
-        b: 100,
-        t: 50,
-        pad: 0
+    title: 'Log Graph',
+    font: {
+      family: "'Nunito', sans-serif",
+      size: 17,
+      color: '#004c8e'
+    },
+    yaxis: {
+      fixedrange: true,
+      color: '#333',
+      tickfont: {
+        size: 14,
+        color: '#7f7f7f'
       }
-  };
 
-  Plotly.newPlot('logChart', data, layout, {displayModeBar: false});
+    },
+    xaxis: {
+      //rangeselector: selectorOptions,
+      color: '#333',
+      tickfont: {
+        size: 14,
+        color: '#7f7f7f'
+      }
 
-  // Activation energy
-  document.getElementById("s1").innerHTML = "Act. Energy 1: " + Math.round(<%=s1%>*100)/100;
-  document.getElementById("s2").innerHTML = "Act. Energy 2: " + Math.round(<%=s2%>*100)/100;
-  document.getElementById("s3").innerHTML = "Act. Energy 3: " + Math.round(<%=s3%>*100)/100;
-  document.getElementById("s4").innerHTML = "Act. Energy 4: " + Math.round(<%=s4%>*100)/100;
-
-  // Dornoch Data
-  var xmlHttp = new XMLHttpRequest();
-  xmlHttp.open("GET", "https://api.openweathermap.org/data/2.5/weather?q=Dornoch&APPID=f7eb12f351a6cc84894f63865583ae7e", true); // false for synchronous request
-  xmlHttp.send(null);
-  xmlHttp.onreadystatechange = processRequest;
-
-  function processRequest(e) {
-    if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-      var response = JSON.parse(xmlHttp.responseText);
-      console.log(response);
-
-      document.getElementById("dornoch").innerHTML = "Dornoch temperature: " + Math.round((response.main.temp - 273.15)*100)/100 + "&#8451";
+    },
+    margin: {
+      b: 100,
+      t: 50,
+      pad: 0
     }
-  }
-
+  };
+  Plotly.newPlot('logChart', data, layout, {
+    displayModeBar: false
+  });
+  // Activation energy
+  document.getElementById("s1").innerHTML = "Activation Energy 1: " + Math.round(<%=s1%> * 100) / 100 + " kJ/Mole";
+  document.getElementById("s2").innerHTML = "Activation Energy 2: " + Math.round(<%=s2%> * 100) / 100 + " kJ/Mole";
+  document.getElementById("s3").innerHTML = "Activation Energy 3: " + Math.round(<%=s3%> * 100) / 100 + " kJ/Mole";
+  document.getElementById("s4").innerHTML = "Activation Energy 4: " + Math.round(<%=s4%> * 100) / 100 + " kJ/Mole";
+  // Dornoch Data
+  // var xmlHttp = new XMLHttpRequest();
+  // xmlHttp.open("GET",
+  //   "https://api.openweathermap.org/data/2.5/weather?q=Dornoch&APPID=f7eb12f351a6cc84894f63865583ae7e", true
+  // ); // false for synchronous request
+  // xmlHttp.send(null);
+  // xmlHttp.onreadystatechange = processRequest;
+  //
+  // function processRequest(e) {
+  //   if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+  //     var response = JSON.parse(xmlHttp.responseText);
+  //     // console.log(response);
+  //     document.getElementById("dornoch").innerHTML = "Dornoch temperature: " + Math.round((response.main.temp -
+  //       273.15) * 100) / 100 + "&#8451";
+  //   }
+  // }
 </script>
-
-
-<% include partials/footer %>

@@ -1,0 +1,155 @@
+<div class="weather__container">
+    <div class="container" id="wrapper">
+        <div class="container-fluid" id="current-weather">
+            <div class="row">
+                <!-- Right panel -->
+                <div class="col-md-5 col-sm-5">
+                    <h5>
+                        <spam id="cityName"></spam>, <spam id="cityCode"></spam>
+                    </h5>
+                    <h6 id="localDate"></h6>
+                </div>
+                <!-- Center panel -->
+                <div class="col-md-3 col-sm-7" style="margin: 10px auto;padding:0;">
+                    <div class="row">
+                        <i class="wi" id="main-icon" style="font-size: 60px;"></i>
+                        <div style="display:flex; flex-direction: column; align-items: center">
+                            <spam id="mainTemperature"></spam>
+                            <p id="tempDescription"></p>
+                        </div>
+                        <p style="font-size: 1.5rem;"><a style="color: #fff" id="celcius">°C</a>
+                    </div>
+                </div>
+
+                <!-- Left panel -->
+                <div class="col-md-4 col-xs-12 col-sm-12 row" style="text-align: right;">
+                    
+                    
+                    <div class="col-md-12 col-sm-3 col-xs-3 side-weather-info">
+                        <h6>Wind: <span id="wind"></span> m/s</h6>
+                    </div>
+                    <div class="col-md-12 col-sm-3 col-xs-3 side-weather-info">
+                        <h6>Humidity: <span id="humidity"></span>%</h6>
+                    </div>
+                    <div class="col-md-12 col-sm-3 col-xs-3 side-weather-info">
+                        <h6>High: <span id="mainTempHot"></span>°</h6>
+                    </div>
+                    <div class="col-md-12 col-sm-3 col-xs-3 side-weather-info">
+                        <h6>Low: <span id="mainTempLow"></span>°</h6>
+                    </div>
+                    
+                </div>
+
+            </div>
+            
+        </div>
+
+        <!-- 6 days forecast -->
+        <div class="row" style="width: 100%; padding: 2px;">
+
+            <!-- Day 1 -->
+            <div class="col-md-2 col-sm-6 day-weather-box">
+                <div class="col-sm-12 day-weather-inner-box">
+                    <p id="forecast-day-1-name"></p>
+                    <div class="row my-2">
+                        <i class="wi forecast-icon" id="forecast-day-1-icon"></i>
+                    </div>
+                    <div class="d-flex">
+                        <span class="high-temperature" id="forecast-day-1-ht"></span>
+                        <span class="low-temperature" id="forecast-day-1-lt"></span>
+                    </div>
+
+                </div>
+            </div>
+            <!-- Day 2 -->
+            <div class="col-md-2 col-sm-6 day-weather-box">
+                <div class="col-sm-12 day-weather-inner-box">
+                    <p id="forecast-day-2-name"></p>
+                    <div class="row my-2">
+                        <i class="wi forecast-icon" id="forecast-day-2-icon"></i>
+                    </div>
+                    <div class="d-flex">
+                        <span class="high-temperature" id="forecast-day-2-ht"></span>
+                        <span class="low-temperature" id="forecast-day-2-lt"></span>
+                    </div>
+                </div>
+            </div>
+            <!-- Day 3 -->
+            <div class="col-md-2 col-sm-6 day-weather-box">
+                <div class="col-sm-12 day-weather-inner-box">
+                    <p id="forecast-day-3-name"></p>
+                    <div class="row my-2">
+                        <i class="wi forecast-icon" id="forecast-day-3-icon"></i>
+                    </div>
+                    <div class="d-flex">
+                        <span class="high-temperature" id="forecast-day-3-ht"></span>
+                        <span class="low-temperature" id="forecast-day-3-lt"></span>
+                    </div>
+                </div>
+            </div>
+            <!-- Day 4 -->
+            <div class="col-md-2 col-sm-6 day-weather-box">
+                <div class="col-sm-12 day-weather-inner-box">
+                    <p id="forecast-day-4-name"></p>
+                    <div class="row my-2">
+                        <i class="wi forecast-icon" id="forecast-day-4-icon"></i>
+                    </div>
+                    <div class="d-flex">
+                        <span class="high-temperature" id="forecast-day-4-ht"></span>
+                        <span class="low-temperature" id="forecast-day-4-lt"></span>
+                    </div>
+                </div>
+            </div>
+            <!-- Day 5 -->
+            <div class="col-md-2 col-sm-6 day-weather-box">
+                <div class="col-sm-12 day-weather-inner-box">
+                    <p id="forecast-day-5-name"></p>
+                    <div class="row my-2">
+                        <i class="wi forecast-icon" id="forecast-day-5-icon"></i>
+                    </div>
+                    <div class="d-flex">
+                        <span class="high-temperature" id="forecast-day-5-ht"></span>
+                        <span class="low-temperature" id="forecast-day-5-lt"></span>
+                    </div>
+                </div>
+            </div>
+            <!-- Day 6 -->
+            <div class="col-md-2 col-sm-6 day-weather-box">
+                <div class="col-sm-12 day-weather-inner-box">
+                    <p id="forecast-day-6-name"></p>
+                    <div class="row my-2">
+                        <i class="wi forecast-icon" id="forecast-day-6-icon"></i>
+                    </div>
+                    <div class="d-flex">
+                        <span class="high-temperature" id="forecast-day-6-ht"></span>
+                        <span class="low-temperature" id="forecast-day-6-lt"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% include activation-energy %>
+
+        <!-- <div class="row activation-energy">
+            <div class="col-md-4 col-sm-3 col-xs-3 side-weather-info">
+                <h6>Act.Energy 1: <span id="s1">-</span></h6>
+            </div>
+            <div class="col-md-4 col-sm-3 col-xs-3 side-weather-info">
+                <h6>Act. Energy 2: <span id="s2">-</span></h6>
+            </div>
+            <div class="col-md-4 col-sm-3 col-xs-3 side-weather-info">
+                <h6>Act. Energy 3: <span id="s3">-</span></h6>
+            </div>
+            <div class="col-md-4 col-sm-3 col-xs-3 side-weather-info">
+                <h6>Act.Energy 4: <span id="s4">-</span></h6>
+            </div>
+            <div class="col-md-4 col-sm-3 col-xs-3 side-weather-info">
+                <h6>Act. Energy 5: <span id="s5">-</span></h6>
+            </div>
+            <div class="col-md-4 col-sm-3 col-xs-3 side-weather-info">
+                <h6>Act. Energy 6: <span id="s6">-</span></h6>
+            </div>
+        </div> -->
+        
+    </div>
+    
+</div>
